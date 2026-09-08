@@ -21,28 +21,28 @@ export async function pageMetadata(
   return {
     title,
     description,
-    applicationName: "Zijian Shen Academic Profile",
+    applicationName: "Shen Zijian Academic Profile",
     alternates: { canonical: `${origin}${path}` },
     openGraph: {
       type: "website",
       url: `${origin}${path}`,
       title,
       description,
-      siteName: "Zijian Shen Academic Profile",
+      siteName: "Shen Zijian Academic Profile",
       images: [
         {
-          url: `${origin}/og.png`,
-          width: 1730,
-          height: 909,
-          alt: "Zijian Shen - Intelligent Mobility Research",
+          url: `${origin}/zijian-shen-portrait.jpg`,
+          width: 720,
+          height: 960,
+          alt: "Shen Zijian - Intelligent Mobility Research",
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title,
       description,
-      images: [`${origin}/og.png`],
+      images: [`${origin}/zijian-shen-portrait.jpg`],
     },
     robots: { index: true, follow: true },
   };

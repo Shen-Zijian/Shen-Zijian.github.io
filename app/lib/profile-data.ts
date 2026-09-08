@@ -4,6 +4,10 @@ export type Publication = {
   title: string;
   authors: string;
   venue: string;
+  eventDetails?: {
+    dates: string;
+    place: string;
+  };
   status?: string;
   url?: string;
 };
@@ -63,6 +67,45 @@ export const journalPapers: Publication[] = [
 ];
 
 export const conferencePapers: Publication[] = [
+  {
+    id: "trb-multimodal-route-recommendation",
+    year: "2026",
+    title:
+      "A temporally aware deep reinforcement learning framework for centralized multi-path recommendation in large-scale multimodal transit networks.",
+    authors: "Shen, Z., Chen, T., Zhou, B., Wang, J., and Ke, J.",
+    venue: "105th Transportation Research Board Annual Meeting",
+    eventDetails: {
+      dates: "January 11-15, 2026",
+      place: "Washington, DC",
+    },
+    status: "Conference presentation",
+  },
+  {
+    id: "hksts-multipath",
+    year: "2025",
+    title:
+      "Multipath: Deep learning based multimodal route guidance with user preference integration.",
+    authors: "Shen, Z., Chen, T., Zhou, B., Wang, J., and Ke, J.",
+    venue: "29th HKSTS International Conference",
+    eventDetails: {
+      dates: "December 8-9, 2025",
+      place: "Hong Kong",
+    },
+    status: "Conference presentation",
+  },
+  {
+    id: "hksts-personalized-fair-matching",
+    year: "2024",
+    title:
+      "Personalized fair matching in peer-to-peer ridesharing platforms under broadcasting mode: a LLM-driven driver approach.",
+    authors: "Shen, Z., Chen, T., Wang, J., and Ke, J.",
+    venue: "28th HKSTS International Conference",
+    eventDetails: {
+      dates: "December 9-10, 2024",
+      place: "Hong Kong",
+    },
+    status: "Conference presentation",
+  },
   {
     id: "yolov5s-distance-estimation",
     year: "2023",
@@ -125,7 +168,7 @@ export const education = [
     dates: "09/2024 - 07/2026",
     degree: "Master of Philosophy in Civil Engineering",
     school: "The University of Hong Kong",
-    note: "Expected",
+    note: "Graduated",
   },
   {
     dates: "09/2022 - 09/2023",
@@ -226,40 +269,11 @@ export const projects = [
   },
 ];
 
-export const presentations = [
-  {
-    year: "2026",
-    dates: "January 11-15, 2026",
-    event: "105th Transportation Research Board Annual Meeting",
-    place: "Washington, DC",
-    authors: "Shen, Z., Chen, T., Zhou, B., Wang, J., and Ke, J.",
-    title:
-      "A temporally aware deep reinforcement learning framework for centralized multi-path recommendation in large-scale multimodal transit networks.",
-  },
-  {
-    year: "2025",
-    dates: "December 8-9, 2025",
-    event: "29th HKSTS International Conference",
-    place: "Hong Kong",
-    authors: "Shen, Z., Chen, T., Zhou, B., Wang, J., and Ke, J.",
-    title:
-      "Multipath: Deep learning based multimodal route guidance with user preference integration.",
-  },
-  {
-    year: "2024",
-    dates: "December 9-10, 2024",
-    event: "28th HKSTS International Conference",
-    place: "Hong Kong",
-    authors: "Shen, Z., Chen, T., Wang, J., and Ke, J.",
-    title:
-      "Personalized fair matching in peer-to-peer ridesharing platforms under broadcasting mode: a LLM-driven driver approach.",
-  },
-];
-
 export const awards = [
   {
     year: "2024 - 2029",
     title: "Postgraduate Scholarship",
+    issuer: "The University of Hong Kong",
   },
   {
     year: "2019",

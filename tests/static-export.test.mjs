@@ -6,6 +6,13 @@ import test from "node:test";
 const require = createRequire(import.meta.url);
 const { parse } = require("next/dist/compiled/node-html-parser");
 const siteOrigin = "https://shen-zijian.github.io";
+const profileUrls = [
+  "mailto:shenzj@connect.hku.hk",
+  "https://github.com/Shen-Zijian",
+  "https://scholar.google.com/citations?user=JTVGGt0AAAAJ&hl=en",
+  "https://www.researchgate.net/profile/Zijian-Shen-4",
+  "https://www.linkedin.com/in/zijian-shen-622005415/",
+];
 const exportDirectory = new URL("../dist/client/", import.meta.url);
 const routes = [
   { path: "/", label: "Home", heading: "About me", file: "index.html" },
@@ -36,10 +43,20 @@ for (const route of routes) {
     const profile = document.querySelector("aside");
     assert.ok(main, "Every page needs a main content target for its skip link");
     assert.equal(text(main.querySelector("h1")), route.heading);
-    assert.match(text(document.querySelector("title")), /Zijian Shen/);
-    assert.match(text(profile), /Zijian Shen/);
+    assert.match(text(document.querySelector("title")), /Shen Zijian/);
+    assert.match(text(profile), /Shen Zijian/);
+    assert.equal(text(profile.querySelector(".identity-name")), "Shen Zijian");
     assert.match(text(profile), /Ph\.?D\.? Student/i);
     assert.doesNotMatch(text(profile), /M\.?Phil\.?|Incoming/i);
+    for (const contactArea of [profile, document.querySelector("footer#contact")]) {
+      assert.ok(contactArea);
+      assert.match(text(contactArea), /Hong Kong, China/);
+      const links = contactArea.querySelectorAll("a[href]")
+        .map((link) => link.getAttribute("href"));
+      for (const url of profileUrls) {
+        assert.ok(links.includes(url), `Missing shared profile URL on ${route.path}: ${url}`);
+      }
+    }
     assert.doesNotMatch(text(main), /ReLMM-TG|\bSelected\b|SkeletonPreview/i);
 
     const primaryNavigation = document.querySelector('nav[aria-label="Primary navigation"]');
@@ -75,11 +92,15 @@ for (const route of routes) {
     );
     assert.equal(
       document.querySelector('meta[property="og:image"]')?.getAttribute("content"),
-      `${siteOrigin}/og.png`,
+      `${siteOrigin}/zijian-shen-portrait.jpg`,
     );
     assert.equal(
       document.querySelector('meta[name="twitter:image"]')?.getAttribute("content"),
-      `${siteOrigin}/og.png`,
+      `${siteOrigin}/zijian-shen-portrait.jpg`,
+    );
+    assert.equal(
+      document.querySelector('meta[name="twitter:card"]')?.getAttribute("content"),
+      "summary",
     );
   });
 }
@@ -112,6 +133,50 @@ test("organizes publications and projects without presenting submissions as acce
   assert.doesNotMatch(text(smartSim), /Major revision/i);
 });
 
+test("moves all conference presentations into research without losing their records", () => {
+  const conferencePapers = documents.get("/research/").querySelector("#conference-papers");
+  const experience = documents.get("/experience/");
+  const presentations = [
+    {
+      title: "A temporally aware deep reinforcement learning framework for centralized multi-path recommendation in large-scale multimodal transit networks.",
+      venue: "105th Transportation Research Board Annual Meeting",
+      dates: "January 11-15, 2026",
+      place: "Washington, DC",
+    },
+    {
+      title: "Multipath: Deep learning based multimodal route guidance with user preference integration.",
+      venue: "29th HKSTS International Conference",
+      dates: "December 8-9, 2025",
+      place: "Hong Kong",
+    },
+    {
+      title: "Personalized fair matching in peer-to-peer ridesharing platforms under broadcasting mode: a LLM-driven driver approach.",
+      venue: "28th HKSTS International Conference",
+      dates: "December 9-10, 2024",
+      place: "Hong Kong",
+    },
+  ];
+
+  assert.ok(conferencePapers);
+  assert.equal(conferencePapers.querySelectorAll("article").length, 4);
+  for (const presentation of presentations) {
+    const article = articleContaining(conferencePapers, presentation.title);
+    const content = text(article);
+    assert.match(content, /Conference presentation/i);
+    for (const detail of [presentation.venue, presentation.dates, presentation.place]) {
+      assert.ok(content.includes(detail), `Missing ${detail} from ${presentation.title}`);
+    }
+    assert.ok(!text(experience.querySelector("main")).includes(presentation.title));
+  }
+  assert.match(
+    text(articleContaining(conferencePapers, "Multi-strategy collaborative optimized YOLOv5s")),
+    /AEECA 2023/,
+  );
+  assert.equal(experience.querySelector("#presentations"), null);
+  assert.equal(experience.querySelector('a[href="#presentations"]'), null);
+  assert.ok(!experience.querySelectorAll("h2, h3").some((heading) => /^Presentations$/i.test(text(heading))));
+});
+
 test("renders the supplied teaching appointments and preserves education history", () => {
   const document = documents.get("/experience/");
   const teaching = document.querySelector("#teaching");
@@ -138,6 +203,19 @@ test("renders the supplied teaching appointments and preserves education history
     assert.ok(officialSource, `${course.code} should link to its official HKU course source`);
   }
   assert.match(text(document.querySelector("main")), /Master of Philosophy/);
+});
+
+test("shows the completed MPhil record and the scholarship issuer", () => {
+  const document = documents.get("/experience/");
+  const education = document.querySelector("#education");
+  const mphil = articleContaining(education, "Master of Philosophy in Civil Engineering");
+  assert.match(text(mphil), /09\/2024 - 07\/2026/);
+  assert.doesNotMatch(text(mphil), /Expected|Present|Upcoming/i);
+  assert.match(text(mphil), /The University of Hong Kong/);
+
+  const scholarship = articleContaining(document.querySelector("#awards"), "Postgraduate Scholarship");
+  assert.match(text(scholarship), /2024 - 2029/);
+  assert.match(text(scholarship), /The University of Hong Kong/);
 });
 
 test("exports every referenced local script, stylesheet, image, and PDF", async () => {

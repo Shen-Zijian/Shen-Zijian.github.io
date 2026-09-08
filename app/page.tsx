@@ -4,7 +4,7 @@ import { researchThemes } from "./lib/profile-data";
 export default function Home() {
   return (
     <SiteFrame current="Home">
-      <PageHeader label="Zijian Shen / Academic profile" title="About me">
+      <PageHeader label="Shen Zijian / Academic profile" title="About me">
         <p>
           I am a <strong>Ph.D. student in Civil Engineering</strong> at{" "}
           <a href="https://www.hku.hk/">The University of Hong Kong</a>.

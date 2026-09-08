@@ -5,8 +5,8 @@ import "./globals.css";
 export function generateMetadata() {
   return pageMetadata(
     "/",
-    "Zijian Shen | Intelligent Mobility Research",
-    "Zijian Shen is a Ph.D. student in Civil Engineering at The University of Hong Kong, researching intelligent transportation, reinforcement learning, and LLM-enhanced travel data generation.",
+    "Shen Zijian | Intelligent Mobility Research",
+    "Shen Zijian is a Ph.D. student in Civil Engineering at The University of Hong Kong, researching intelligent transportation, reinforcement learning, and LLM-enhanced travel data generation.",
   );
 }
 

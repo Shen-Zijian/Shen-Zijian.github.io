@@ -5,6 +5,13 @@ import test from "node:test";
 
 const require = createRequire(import.meta.url);
 const { parse } = require("next/dist/compiled/node-html-parser");
+const profileUrls = [
+  "mailto:shenzj@connect.hku.hk",
+  "https://github.com/Shen-Zijian",
+  "https://scholar.google.com/citations?user=JTVGGt0AAAAJ&hl=en",
+  "https://www.researchgate.net/profile/Zijian-Shen-4",
+  "https://www.linkedin.com/in/zijian-shen-622005415/",
+];
 const workerUrl = new URL("../dist/server/index.js", import.meta.url);
 workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
 const { default: worker } = await import(workerUrl.href);
@@ -46,12 +53,18 @@ for (const route of routes) {
     const main = document.querySelector("main#main-content");
     const profile = document.querySelector("aside");
     assert.equal(text(main?.querySelector("h1")), route.heading);
-    assert.match(text(document.querySelector("title")), /Zijian Shen/);
-    assert.match(text(profile), /Zijian Shen/);
+    assert.match(text(document.querySelector("title")), /Shen Zijian/);
+    assert.match(text(profile), /Shen Zijian/);
+    assert.equal(text(profile.querySelector(".identity-name")), "Shen Zijian");
     assert.match(text(profile), /Ph\.?D\.? Student/i);
     assert.doesNotMatch(text(profile), /M\.?Phil\.?|Incoming/i);
     assert.match(text(profile), /The University of Hong Kong/);
-    assert.ok(document.querySelector('a[href="mailto:shenzj@connect.hku.hk"]'));
+    assert.match(text(profile), /Hong Kong, China/);
+    const contactLinks = profile.querySelectorAll("a[href]")
+      .map((link) => link.getAttribute("href"));
+    for (const url of profileUrls) {
+      assert.ok(contactLinks.includes(url), `Missing shared profile URL on ${route.path}: ${url}`);
+    }
     assert.ok(document.querySelector('img[src="/zijian-shen-portrait.jpg"]'));
     assert.doesNotMatch(text(main), /ReLMM-TG|\bSelected\b/i);
     assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
@@ -72,13 +85,35 @@ for (const route of routes) {
       for (const id of ["journal-papers", "conference-papers", "working-papers", "projects"]) {
         assert.ok(main.querySelector(`#${id}`));
       }
+      const conferencePapers = main.querySelector("#conference-papers");
+      assert.equal(conferencePapers.querySelectorAll("article").length, 4);
+      for (const title of [
+        "A temporally aware deep reinforcement learning framework for centralized multi-path recommendation in large-scale multimodal transit networks.",
+        "Multipath: Deep learning based multimodal route guidance with user preference integration.",
+        "Personalized fair matching in peer-to-peer ridesharing platforms under broadcasting mode: a LLM-driven driver approach.",
+      ]) {
+        const article = conferencePapers.querySelectorAll("article")
+          .find((entry) => text(entry).includes(title));
+        assert.ok(article, `Missing conference presentation: ${title}`);
+        assert.match(text(article), /Conference presentation/i);
+      }
     }
     if (route.path === "/experience/") {
       assert.match(text(main), /Teaching Assistant/);
       for (const code of ["CIVL6047", "CIVL3120", "CIVL7018", "CIVL7021"]) {
         assert.ok(text(main).includes(code));
       }
-      assert.match(text(main), /Master of Philosophy/);
+      const mphil = main.querySelectorAll("#education article")
+        .find((entry) => text(entry).includes("Master of Philosophy in Civil Engineering"));
+      assert.ok(mphil);
+      assert.match(text(mphil), /09\/2024 - 07\/2026/);
+      assert.doesNotMatch(text(mphil), /Expected|Present|Upcoming/i);
+      const scholarship = main.querySelectorAll("#awards article")
+        .find((entry) => text(entry.querySelector("h3")) === "Postgraduate Scholarship");
+      assert.ok(scholarship);
+      assert.match(text(scholarship), /The University of Hong Kong/);
+      assert.equal(main.querySelector("#presentations"), null);
+      assert.equal(main.querySelector('a[href="#presentations"]'), null);
     }
   });
 }

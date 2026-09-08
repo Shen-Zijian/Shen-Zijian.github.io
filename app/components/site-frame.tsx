@@ -1,5 +1,55 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- Static pages use full document navigation. */
 import type { ReactNode } from "react";
+import {
+  BookOpen,
+  BriefcaseBusiness,
+  CodeXml,
+  FileText,
+  GraduationCap,
+  Mail,
+  MapPin,
+} from "lucide-react";
+
+const profileLinks = [
+  { label: "Email", href: "mailto:shenzj@connect.hku.hk", icon: Mail },
+  {
+    label: "ResearchGate",
+    href: "https://www.researchgate.net/profile/Zijian-Shen-4",
+    icon: BookOpen,
+  },
+  { label: "GitHub", href: "https://github.com/Shen-Zijian", icon: CodeXml },
+  {
+    label: "Google Scholar",
+    href: "https://scholar.google.com/citations?user=JTVGGt0AAAAJ&hl=en",
+    icon: GraduationCap,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/zijian-shen-622005415/",
+    icon: BriefcaseBusiness,
+  },
+];
+
+function ProfileLinks({ fullEmail = false }: { fullEmail?: boolean }) {
+  return (
+    <ul className="profile-links">
+      {profileLinks.map(({ label, href, icon: Icon }) => (
+        <li key={label}>
+          <a
+            href={href}
+            target={href.startsWith("https:") ? "_blank" : undefined}
+            rel={href.startsWith("https:") ? "noopener noreferrer" : undefined}
+          >
+            <Icon size={17} strokeWidth={1.7} aria-hidden="true" />
+            <span>
+              {fullEmail && label === "Email" ? "shenzj@connect.hku.hk" : label}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -21,8 +71,8 @@ export function SiteFrame({
       </a>
       <aside className="identity-panel" aria-label="Profile">
         <div className="identity-inner">
-          <a className="monogram" href="/" aria-label="Zijian Shen home">
-            ZS
+          <a className="monogram" href="/" aria-label="Shen Zijian home">
+            SZ
           </a>
           <figure className="portrait-frame">
             {/* A static image keeps the portrait portable across both hosting providers. */}
@@ -31,13 +81,13 @@ export function SiteFrame({
               src="/zijian-shen-portrait.jpg"
               width="720"
               height="960"
-              alt="Portrait of Zijian Shen"
+              alt="Portrait of Shen Zijian"
               fetchPriority="high"
             />
           </figure>
           <div className="identity-copy">
             <a className="identity-name" href="/">
-              Zijian Shen
+              Shen Zijian
             </a>
             <p className="chinese-name" lang="zh-Hans">
               申子健
@@ -49,16 +99,23 @@ export function SiteFrame({
               The University of Hong Kong
             </p>
           </div>
-          <div className="identity-actions" aria-label="Profile links">
-            <a href="mailto:shenzj@connect.hku.hk">
-              Email <span aria-hidden="true">↗</span>
-            </a>
+          <address
+            className="identity-contact"
+            aria-label="Contact and academic profiles"
+          >
+            <p className="profile-location">
+              <MapPin size={17} strokeWidth={1.7} aria-hidden="true" />
+              <span>Hong Kong, China</span>
+            </p>
+            <ProfileLinks />
+          </address>
+          <div className="identity-actions" aria-label="Curriculum vitae">
             <a href="/Zijian_Shen_Academic_CV.pdf" download>
-              CV <span aria-hidden="true">↓</span>
+              <FileText size={17} strokeWidth={1.7} aria-hidden="true" /> CV
             </a>
           </div>
           <div className="identity-footer">
-            <span>Hong Kong</span>
+            <span>HKU</span>
             <span>Academic profile / 2026</span>
           </div>
         </div>
@@ -76,7 +133,7 @@ export function SiteFrame({
               </a>
             ))}
           </nav>
-          <a className="topbar-contact" href="mailto:shenzj@connect.hku.hk">
+          <a className="topbar-contact" href="#contact">
             Contact <span aria-hidden="true">↗</span>
           </a>
         </header>
@@ -86,18 +143,20 @@ export function SiteFrame({
             <p className="eyebrow">Get in touch</p>
             <h2>Contact</h2>
           </div>
-          <div className="contact-details">
-            <a href="mailto:shenzj@connect.hku.hk">
-              shenzj@connect.hku.hk <span aria-hidden="true">↗</span>
-            </a>
-            <p>
+          <address className="contact-details">
+            <p className="profile-location">
+              <MapPin size={17} strokeWidth={1.7} aria-hidden="true" />
+              <span>Hong Kong, China</span>
+            </p>
+            <p className="contact-affiliation">
               Department of Civil Engineering
               <br />
-              The University of Hong Kong, Hong Kong
+              The University of Hong Kong
             </p>
-          </div>
+            <ProfileLinks fullEmail />
+          </address>
           <div className="footer-line">
-            <span>© 2026 Zijian Shen</span>
+            <span>© 2026 Shen Zijian</span>
             <a href="#top">Back to top ↑</a>
           </div>
         </footer>
