@@ -205,17 +205,34 @@ test("renders the supplied teaching appointments and preserves education history
   assert.match(text(document.querySelector("main")), /Master of Philosophy/);
 });
 
-test("shows the completed MPhil record and the scholarship issuer", () => {
+test("shows the completed MPhil record", () => {
   const document = documents.get("/experience/");
   const education = document.querySelector("#education");
   const mphil = articleContaining(education, "Master of Philosophy in Civil Engineering");
   assert.match(text(mphil), /09\/2024 - 07\/2026/);
   assert.doesNotMatch(text(mphil), /Expected|Present|Upcoming/i);
   assert.match(text(mphil), /The University of Hong Kong/);
+});
 
-  const scholarship = articleContaining(document.querySelector("#awards"), "Postgraduate Scholarship");
+test("exports complete scholarship names without a duplicate undergraduate suffix", () => {
+  const awards = documents.get("/experience/").querySelector("#awards");
+  const scholarship = articleContaining(awards, "Postgraduate Scholarship");
   assert.match(text(scholarship), /2024 - 2029/);
-  assert.match(text(scholarship), /The University of Hong Kong/);
+  assert.equal(
+    text(scholarship.querySelector("h3")),
+    "Postgraduate Scholarship, The University of Hong Kong",
+  );
+
+  const undergraduate = articleContaining(awards, "Second-Class Scholarship for Academic Excellence");
+  assert.equal(
+    text(undergraduate.querySelector("h3")),
+    "Second-Class Scholarship for Academic Excellence, Beijing Institute of Technology",
+  );
+  assert.doesNotMatch(text(undergraduate), /Postgraduate Scholarship/);
+  assert.equal(
+    awards.querySelectorAll("h3").filter((heading) => text(heading).includes("Postgraduate Scholarship")).length,
+    1,
+  );
 });
 
 test("exports every referenced local script, stylesheet, image, and PDF", async () => {

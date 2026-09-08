@@ -109,9 +109,16 @@ for (const route of routes) {
       assert.match(text(mphil), /09\/2024 - 07\/2026/);
       assert.doesNotMatch(text(mphil), /Expected|Present|Upcoming/i);
       const scholarship = main.querySelectorAll("#awards article")
-        .find((entry) => text(entry.querySelector("h3")) === "Postgraduate Scholarship");
+        .find((entry) => text(entry.querySelector("h3")) === "Postgraduate Scholarship, The University of Hong Kong");
       assert.ok(scholarship);
-      assert.match(text(scholarship), /The University of Hong Kong/);
+      const undergraduate = main.querySelectorAll("#awards article")
+        .find((entry) => text(entry.querySelector("h3")).startsWith("Second-Class Scholarship for Academic Excellence"));
+      assert.ok(undergraduate);
+      assert.equal(
+        text(undergraduate.querySelector("h3")),
+        "Second-Class Scholarship for Academic Excellence, Beijing Institute of Technology",
+      );
+      assert.doesNotMatch(text(undergraduate), /Postgraduate Scholarship/);
       assert.equal(main.querySelector("#presentations"), null);
       assert.equal(main.querySelector('a[href="#presentations"]'), null);
     }
