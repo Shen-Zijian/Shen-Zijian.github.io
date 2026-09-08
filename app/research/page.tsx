@@ -17,7 +17,7 @@ import { pageMetadata } from "../lib/page-metadata";
 export function generateMetadata() {
   return pageMetadata(
     "/research/",
-    "Research | Zijian Shen",
+    "Research | Shen Zijian",
     "Journal papers, conference papers, working papers, and projects in intelligent transportation, reinforcement learning, and travel data generation.",
   );
 }
@@ -55,6 +55,11 @@ function PaperList({
                 <Authors value={paper.authors} />
               </p>
               <p className="publication-venue">{paper.venue}</p>
+              {paper.eventDetails && (
+                <p className="authors">
+                  {paper.eventDetails.place} · {paper.eventDetails.dates}
+                </p>
+              )}
               {paper.url && (
                 <div className="paper-links">
                   <a className="text-link" href={paper.url}>
