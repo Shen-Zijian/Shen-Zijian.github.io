@@ -22,10 +22,16 @@ The GitHub Pages build does not require a server, database, or ChatGPT sign-in.
 
 ## Update Content
 
-- Edit `app/page.tsx` for research interests, publications, experience, and contact details.
-- Edit `app/globals.css` for the visual style and `app/layout.tsx` for page metadata.
+- Edit `app/lib/profile-data.ts` for publications, research interests, education, and experience.
+- Edit `app/page.tsx`, `app/research/page.tsx`, and `app/experience/page.tsx` for the three page layouts.
+- Edit `app/components/site-frame.tsx` for the shared profile, navigation, and contact details.
+- Edit `app/globals.css` for visual styles and `app/lib/page-metadata.ts` for shared metadata.
 - Replace `public/Zijian_Shen_Academic_CV.pdf` to update the downloadable CV.
-- Replace `public/zijian-shen.jpg` for the portrait and `public/og.png` for the sharing image.
+- Replace `public/zijian-shen-portrait.jpg` for the portrait and `public/og.png` for the sharing image.
+  The portrait uses a 3:4 crop; keep enough resolution for high-density screens.
+
+Teaching entries link to official HKU course descriptions. Future appointments are
+marked `Upcoming`; confirm their completion before changing that label.
 
 ## GitHub Pages Deployment
 
