@@ -1,5 +1,4 @@
 import {
-  Authors,
   PageHeader,
   SectionHeading,
   SectionNavigation,
@@ -9,7 +8,6 @@ import {
   awards,
   education,
   experience,
-  presentations,
   teachingCourses,
 } from "../lib/profile-data";
 import { pageMetadata } from "../lib/page-metadata";
@@ -17,8 +15,8 @@ import { pageMetadata } from "../lib/page-metadata";
 export function generateMetadata() {
   return pageMetadata(
     "/experience/",
-    "Experience | Zijian Shen",
-    "Zijian Shen's education, research experience, teaching assistant appointments, presentations, and academic honors.",
+    "Experience | Shen Zijian",
+    "Shen Zijian's education, research experience, teaching assistant appointments, and academic honors.",
   );
 }
 
@@ -27,8 +25,8 @@ export default function Experience() {
     <SiteFrame current="Experience">
       <PageHeader label="Academic background" title="Experience">
         <p>
-          Education, research appointments, teaching, and academic exchange
-          across civil engineering and computer science.
+          Education, research appointments, teaching, and academic honors across
+          civil engineering and computer science.
         </p>
       </PageHeader>
       <SectionNavigation
@@ -36,7 +34,6 @@ export default function Experience() {
           { label: "Education", href: "#education" },
           { label: "Research Experience", href: "#research-experience" },
           { label: "Teaching", href: "#teaching" },
-          { label: "Presentations", href: "#presentations" },
           { label: "Awards", href: "#awards" },
         ]}
       />
@@ -109,33 +106,9 @@ export default function Experience() {
           ))}
         </div>
       </section>
-      <section className="section" id="presentations">
-        <SectionHeading
-          index="04"
-          label="Academic exchange"
-          title="Presentations"
-        />
-        <div className="record-list">
-          {presentations.map((item) => (
-            <article className="record-row presentation-row" key={item.year}>
-              <p className="record-dates">{item.year}</p>
-              <div>
-                <h3>{item.title}</h3>
-                <p className="authors">
-                  <Authors value={item.authors} />
-                </p>
-                <p className="event-name">{item.event}</p>
-                <p>
-                  {item.place} · {item.dates}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
       <section className="section section-paper" id="awards">
         <SectionHeading
-          index="05"
+          index="04"
           label="Recognition"
           title="Honors & Awards"
         />
@@ -143,7 +116,10 @@ export default function Experience() {
           {awards.map((item) => (
             <article className="award-row" key={`${item.year}-${item.title}`}>
               <span>{item.year}</span>
-              <h3>{item.title}</h3>
+              <div>
+                <h3>{item.title}</h3>
+                {item.issuer && <p className="record-note">{item.issuer}</p>}
+              </div>
             </article>
           ))}
         </div>
