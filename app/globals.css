@@ -12,7 +12,7 @@
   --oxblood: #793b36;
   --rule: #d7dbd8;
   --rule-dark: #3d5557;
-  --topbar-height: 64px;
+  --topbar-height: 72px;
 }
 
 * {
@@ -51,7 +51,7 @@ a:focus-visible {
   color: var(--teal-deep);
 }
 [id] {
-  scroll-margin-top: 140px;
+  scroll-margin-top: 160px;
 }
 p {
   margin-top: 0;
@@ -89,6 +89,9 @@ p {
   top: 0;
   display: flex;
   min-height: 100svh;
+  max-height: 100svh;
+  overflow-y: auto;
+  scrollbar-width: thin;
   flex-direction: column;
   padding: 28px 32px 24px;
   border-right: 1px solid rgba(168, 137, 79, 0.7);
@@ -100,6 +103,9 @@ p {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
   line-height: 1;
+}
+.identity-inner > * {
+  flex-shrink: 0;
 }
 .portrait-frame {
   width: 202px;
@@ -148,17 +154,68 @@ p {
 .identity-actions {
   display: flex;
   gap: 26px;
-  margin: 24px 0 30px;
+  margin: 14px 0 26px;
 }
 .identity-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.48);
   padding-bottom: 5px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 .identity-actions a:hover {
   color: #e5cd99;
   border-color: var(--brass);
+}
+.identity-contact {
+  margin-top: 24px;
+  font-style: normal;
+}
+.profile-location,
+.profile-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.profile-location {
+  margin: 0 0 9px;
+}
+.profile-location svg,
+.profile-links svg,
+.identity-actions svg {
+  flex: 0 0 auto;
+  color: #d6bd85;
+}
+.profile-links {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.profile-links a {
+  min-height: 32px;
+  width: fit-content;
+  max-width: 100%;
+}
+.profile-links a:hover span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--brass);
+}
+.profile-links span {
+  overflow-wrap: anywhere;
+}
+.identity-contact .profile-location {
+  color: #b9c7c6;
+}
+.identity-contact a:hover {
+  color: #e5cd99;
 }
 .identity-footer {
   display: flex;
@@ -197,7 +254,7 @@ p {
   min-height: var(--topbar-height);
 }
 .topbar a {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.4;
   font-weight: 700;
   color: #34403e;
@@ -218,7 +275,7 @@ p {
 }
 .topbar .topbar-contact {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 .page-header {
   padding: 50px 56px 44px;
@@ -272,7 +329,7 @@ p {
 }
 .section-navigation a {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.6;
 }
@@ -629,20 +686,31 @@ p {
   font-weight: 600;
   line-height: 1.2;
 }
-.contact-details a {
-  display: inline-block;
-  max-width: 100%;
-  color: var(--teal);
-  border-bottom: 1px solid var(--brass);
-  padding-bottom: 4px;
-  font-size: 14px;
-  font-weight: 700;
-  overflow-wrap: anywhere;
+.contact-details {
+  min-width: 0;
+  font-style: normal;
 }
-.contact-details p {
-  margin: 12px 0 0;
+.contact-details .profile-links {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 22px;
+}
+.contact-details .profile-links li:first-child {
+  grid-column: 1 / -1;
+}
+.contact-details .profile-links a {
+  color: var(--teal);
+}
+.contact-details svg {
+  color: var(--brass-text);
+}
+.contact-details .profile-location {
+  color: var(--teal);
+  font-weight: 600;
+}
+.contact-affiliation {
+  margin: 8px 0 18px 27px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.7;
 }
 .footer-line {
@@ -720,7 +788,7 @@ p {
 }
 @media (max-width: 860px) {
   :root {
-    --topbar-height: 58px;
+    --topbar-height: 64px;
   }
   .site-shell {
     display: block;
@@ -729,6 +797,8 @@ p {
     position: relative;
     display: grid;
     min-height: 0;
+    max-height: none;
+    overflow: visible;
     grid-template-columns: 118px minmax(0, 1fr);
     gap: 0 24px;
     padding: 24px 28px;
@@ -740,7 +810,7 @@ p {
     display: none;
   }
   .portrait-frame {
-    grid-row: 1 / span 2;
+    grid-row: 1;
     width: 118px;
     align-self: start;
     margin: 0;
@@ -763,12 +833,21 @@ p {
     line-height: 1.5;
   }
   .identity-actions {
-    grid-column: 2;
-    margin: 12px 0 0;
+    grid-column: 1 / -1;
+    margin: 14px 0 0;
     gap: 24px;
   }
   .identity-actions a {
-    font-size: 12px;
+    font-size: 13px;
+  }
+  .identity-contact {
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--rule-dark);
+  }
+  .identity-contact .profile-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .page-header {
     padding: 36px 28px;
@@ -798,7 +877,7 @@ p {
 }
 @media (max-width: 520px) {
   [id] {
-    scroll-margin-top: 164px;
+    scroll-margin-top: 176px;
   }
   .identity-inner {
     grid-template-columns: 102px minmax(0, 1fr);
@@ -821,6 +900,13 @@ p {
   .identity-actions {
     margin-top: 10px;
   }
+  .identity-contact .profile-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .identity-contact .profile-location,
+  .identity-contact .profile-links a {
+    font-size: 13px;
+  }
   .topbar {
     padding: 0 20px;
     gap: 16px;
@@ -829,7 +915,7 @@ p {
     gap: 24px;
   }
   .topbar a {
-    font-size: 12px;
+    font-size: 15px;
   }
   .topbar .topbar-contact {
     display: none;
@@ -839,7 +925,7 @@ p {
     gap: 7px 18px;
   }
   .section-navigation a {
-    font-size: 11px;
+    font-size: 13px;
   }
   .page-header {
     padding: 28px 20px 30px;
