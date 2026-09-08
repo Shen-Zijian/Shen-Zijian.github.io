@@ -1,6 +1,6 @@
-# Zijian Shen | Academic Homepage
+# Shen Zijian | Academic Homepage
 
-Personal academic website for Zijian Shen, covering research in intelligent
+Personal academic website for Shen Zijian, covering research in intelligent
 transportation, reinforcement learning, and large language models.
 
 Website: [shen-zijian.github.io](https://shen-zijian.github.io)
@@ -27,7 +27,7 @@ The GitHub Pages build does not require a server, database, or ChatGPT sign-in.
 - Edit `app/components/site-frame.tsx` for the shared profile, navigation, and contact details.
 - Edit `app/globals.css` for visual styles and `app/lib/page-metadata.ts` for shared metadata.
 - Replace `public/Zijian_Shen_Academic_CV.pdf` to update the downloadable CV.
-- Replace `public/zijian-shen-portrait.jpg` for the portrait and `public/og.png` for the sharing image.
+- Replace `public/zijian-shen-portrait.jpg` for the portrait and social sharing image.
   The portrait uses a 3:4 crop; keep enough resolution for high-density screens.
 
 Teaching entries link to official HKU course descriptions. Future appointments are
