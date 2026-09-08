@@ -272,8 +272,7 @@ export const projects = [
 export const awards = [
   {
     year: "2024 - 2029",
-    title: "Postgraduate Scholarship",
-    issuer: "The University of Hong Kong",
+    title: "Postgraduate Scholarship, The University of Hong Kong",
   },
   {
     year: "2019",
@@ -287,6 +286,6 @@ export const awards = [
   {
     year: "2017 & 2018",
     title:
-      "Second-Class Scholarship for Academic Excellence, Beijing Institute of Technology Postgraduate Scholarship",
+      "Second-Class Scholarship for Academic Excellence, Beijing Institute of Technology",
   },
 ];

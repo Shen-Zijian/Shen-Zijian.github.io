@@ -118,7 +118,6 @@ export default function Experience() {
               <span>{item.year}</span>
               <div>
                 <h3>{item.title}</h3>
-                {item.issuer && <p className="record-note">{item.issuer}</p>}
               </div>
             </article>
           ))}
