@@ -116,7 +116,7 @@ export function SiteFrame({
           </div>
           <div className="identity-footer">
             <span>HKU</span>
-            <span>Academic profile / 2026</span>
+            <span>Academic profile</span>
           </div>
         </div>
       </aside>
@@ -140,7 +140,6 @@ export function SiteFrame({
         <main id="main-content">{children}</main>
         <footer className="contact-section" id="contact">
           <div>
-            <p className="eyebrow">Get in touch</p>
             <h2>Contact</h2>
           </div>
           <address className="contact-details">
@@ -166,17 +165,14 @@ export function SiteFrame({
 }
 
 export function PageHeader({
-  label,
   title,
   children,
 }: {
-  label: string;
   title: string;
   children: ReactNode;
 }) {
   return (
     <header className="page-header">
-      <p className="eyebrow">{label}</p>
       <h1>{title}</h1>
       <div className="page-intro">{children}</div>
     </header>
@@ -184,21 +180,13 @@ export function PageHeader({
 }
 
 export function SectionHeading({
-  index,
-  label,
   title,
 }: {
-  index: string;
-  label: string;
   title: string;
 }) {
   return (
     <header className="section-heading">
-      <span className="section-index">{index}</span>
-      <div>
-        <p className="eyebrow">{label}</p>
-        <h2>{title}</h2>
-      </div>
+      <h2>{title}</h2>
     </header>
   );
 }
