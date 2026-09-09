@@ -125,11 +125,13 @@ export default function Research() {
                 {index + 1}.
               </span>
               <div>
-                <p className="project-meta">
-                  {project.dates} · {project.code}
-                </p>
                 <h3>{project.title}</h3>
-                <p className="project-funder">{project.funder}</p>
+                <p className="project-funder">
+                  {project.funder}
+                  <span className="project-meta">
+                    {" · "}{project.dates}{" · "}{project.code}
+                  </span>
+                </p>
                 <p className="project-role">Core Member</p>
               </div>
             </article>
