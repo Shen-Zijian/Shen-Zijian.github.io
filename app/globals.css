@@ -13,6 +13,10 @@
   --rule: #d7dbd8;
   --rule-dark: #3d5557;
   --topbar-height: 72px;
+  --font-sans: Arial, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-chinese: "Songti SC", serif;
+  --entry-title-size: 22px;
 }
 
 * {
@@ -27,7 +31,7 @@ body {
   margin: 0;
   background: var(--white);
   color: var(--ink);
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
 }
 a {
@@ -100,7 +104,7 @@ p {
   align-self: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.38);
   padding: 8px 10px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 16px;
   line-height: 1;
 }
@@ -126,7 +130,7 @@ p {
 .identity-name {
   display: inline-block;
   max-width: 100%;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 36px;
   font-weight: 600;
   line-height: 1.05;
@@ -134,7 +138,7 @@ p {
 .chinese-name {
   margin: 7px 0 0;
   color: #d6bd85;
-  font-family: "Songti SC", "STSong", Georgia, serif;
+  font-family: var(--font-chinese);
   font-size: 19px;
   font-weight: 700;
 }
@@ -282,7 +286,7 @@ p {
 }
 .page-header h1 {
   margin: 0 0 24px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 46px;
   line-height: 1.1;
   font-weight: 600;
@@ -342,7 +346,7 @@ p {
 }
 .section-heading h2 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 32px;
   font-weight: 600;
   line-height: 1.2;
@@ -389,6 +393,23 @@ p {
   margin-bottom: 20px;
 }
 
+.publication-number,
+.publication-main h4,
+.project-number,
+.project-row h3,
+.record-dates,
+.record-row h3,
+.course-code,
+.course-main h3,
+.course-term p,
+.award-row > span,
+.award-row h3 {
+  font-family: var(--font-serif);
+  font-size: var(--entry-title-size);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .publication-group + .publication-group {
   margin-top: 42px;
 }
@@ -401,7 +422,7 @@ p {
 }
 .subsection-heading h3 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 24px;
   font-weight: 500;
   line-height: 1.35;
@@ -414,34 +435,27 @@ p {
 }
 .publication-row {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: first baseline;
   gap: 16px;
   padding: 25px 0 28px;
   border-bottom: 1px solid var(--rule);
 }
 .publication-number {
   color: var(--oxblood);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.6;
-  padding-top: 4px;
 }
 .paper-status {
   display: inline-block;
   margin-left: 8px;
   color: var(--oxblood);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-family: var(--font-sans);
+  font-size: inherit;
   font-style: normal;
   font-weight: 600;
 }
 .publication-main h4 {
   max-width: 900px;
   margin: 0 0 10px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1.4;
   overflow-wrap: break-word;
 }
 .publication-main .authors {
@@ -457,7 +471,7 @@ p {
 .publication-venue {
   margin: 0;
   color: var(--teal);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 14px;
   font-style: italic;
   line-height: 1.6;
@@ -475,49 +489,40 @@ p {
 }
 .project-row {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: first baseline;
   gap: 16px;
   padding: 26px 0 28px;
   border-bottom: 1px solid var(--rule-dark);
 }
 .project-number {
   color: #d7bc83;
-  font-size: 14px;
-  font-weight: 700;
-  padding-top: 2px;
 }
 .project-meta {
-  margin: 0 0 10px;
   color: #9eb2b0;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1.7;
 }
 .project-row h3 {
   max-width: 900px;
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.45;
 }
 .project-funder {
   margin: 12px 0 0;
   color: #aebfbd;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 .project-role {
   margin: 8px 0 0;
   color: #d7bc83;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
 }
 
 .record-row {
   display: grid;
-  grid-template-columns: 155px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: first baseline;
   gap: 28px;
   padding: 24px 0;
   border-bottom: 1px solid var(--rule);
@@ -525,15 +530,9 @@ p {
 .record-dates {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.6;
 }
 .record-row h3 {
   margin: 0 0 7px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
 }
 .record-row div p {
   margin: 0 0 5px;
@@ -545,9 +544,9 @@ p {
   display: inline-block;
   margin-top: 4px;
   color: var(--oxblood);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.7;
 }
 .section-intro {
   margin: -10px 0 28px;
@@ -557,24 +556,17 @@ p {
 }
 .teaching-row {
   display: grid;
-  grid-template-columns: 90px minmax(0, 1fr) 128px;
+  grid-template-columns: 128px minmax(0, 1fr) 132px;
+  align-items: first baseline;
   gap: 22px;
   padding: 28px 0;
   border-bottom: 1px solid var(--rule);
 }
 .course-code {
   color: var(--oxblood);
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.6;
-  padding-top: 3px;
 }
 .course-main h3 {
   margin: 0 0 10px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 21px;
-  font-weight: 600;
-  line-height: 1.4;
 }
 .course-main > p {
   margin: 0 0 14px;
@@ -588,22 +580,18 @@ p {
 .course-term p {
   margin: 0 0 4px;
   color: var(--ink);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.5;
 }
 .course-term span {
   display: block;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.6;
 }
 .course-term .upcoming {
   margin-top: 5px;
   color: var(--oxblood);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
 }
 .presentation-row .event-name {
   color: var(--teal);
@@ -612,23 +600,17 @@ p {
 }
 .award-row {
   display: grid;
-  grid-template-columns: 155px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: first baseline;
   gap: 28px;
   padding: 24px 0;
   border-bottom: 1px solid var(--rule);
 }
 .award-row > span {
   color: var(--oxblood);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.6;
 }
 .award-row h3 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
 }
 
 .contact-section {
@@ -641,7 +623,7 @@ p {
 }
 .contact-section h2 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 28px;
   font-weight: 600;
   line-height: 1.2;
@@ -725,7 +707,7 @@ p {
     padding-right: 36px;
   }
   .teaching-row {
-    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-columns: 128px minmax(0, 1fr);
     gap: 16px;
   }
   .course-terms {
@@ -739,7 +721,7 @@ p {
   }
   .record-row,
   .award-row {
-    grid-template-columns: 130px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr);
     gap: 20px;
   }
   .section-navigation {
@@ -904,12 +886,8 @@ p {
   }
   .publication-row,
   .project-row {
-    grid-template-columns: 22px minmax(0, 1fr);
+    grid-template-columns: 34px minmax(0, 1fr);
     gap: 12px;
-  }
-  .publication-main h4,
-  .project-row h3 {
-    font-size: 20px;
   }
   .subsection-heading h3 {
     font-size: 23px;
@@ -920,10 +898,6 @@ p {
     gap: 9px;
     padding: 22px 0;
   }
-  .record-row h3,
-  .award-row h3 {
-    font-size: 19px;
-  }
   .section-intro {
     margin: -7px 0 24px;
     font-size: 13px;
@@ -931,9 +905,6 @@ p {
   .teaching-row {
     grid-template-columns: 1fr;
     gap: 10px;
-  }
-  .course-main h3 {
-    font-size: 21px;
   }
   .course-terms {
     grid-column: 1;
