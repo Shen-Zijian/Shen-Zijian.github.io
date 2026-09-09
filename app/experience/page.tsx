@@ -23,7 +23,7 @@ export function generateMetadata() {
 export default function Experience() {
   return (
     <SiteFrame current="Experience">
-      <PageHeader label="Academic background" title="Experience">
+      <PageHeader title="Experience">
         <p>
           Education, research appointments, teaching, and academic honors across
           civil engineering and computer science.
@@ -38,7 +38,7 @@ export default function Experience() {
         ]}
       />
       <section className="section" id="education">
-        <SectionHeading index="01" label="Training" title="Education" />
+        <SectionHeading title="Education" />
         <div className="record-list">
           {education.map((item) => (
             <article className="record-row" key={item.degree}>
@@ -53,11 +53,7 @@ export default function Experience() {
         </div>
       </section>
       <section className="section section-paper" id="research-experience">
-        <SectionHeading
-          index="02"
-          label="Appointments"
-          title="Research Experience"
-        />
+        <SectionHeading title="Research Experience" />
         <div className="record-list">
           {experience.map((item) => (
             <article className="record-row" key={item.institution}>
@@ -72,13 +68,10 @@ export default function Experience() {
         </div>
       </section>
       <section className="section" id="teaching">
-        <SectionHeading
-          index="03"
-          label="The University of Hong Kong"
-          title="Teaching"
-        />
+        <SectionHeading title="Teaching" />
         <p className="section-intro">
-          Teaching Assistant, Department of Civil Engineering
+          Teaching Assistant, Department of Civil Engineering, The University of
+          Hong Kong
         </p>
         <div className="teaching-list">
           {teachingCourses.map((course) => (
@@ -107,11 +100,7 @@ export default function Experience() {
         </div>
       </section>
       <section className="section section-paper" id="awards">
-        <SectionHeading
-          index="04"
-          label="Recognition"
-          title="Honors & Awards"
-        />
+        <SectionHeading title="Honors & Awards" />
         <div className="award-list">
           {awards.map((item) => (
             <article className="award-row" key={`${item.year}-${item.title}`}>
