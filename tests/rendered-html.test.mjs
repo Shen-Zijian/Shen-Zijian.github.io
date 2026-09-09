@@ -177,6 +177,7 @@ test("shares entry typography and baseline rules without expanding the font pale
     assert.ok([...fontTokens.keys()].some((token) => declaration.value === `var(${token})`), `Unmanaged font family: ${declaration.value}`);
   });
 
+  const boldMetadataSelectors = [".record-dates", ".course-code", ".course-term p", ".award-row > span"];
   const typographyGroups = [
     {
       name: "Entry titles and publication/project indices",
@@ -204,6 +205,7 @@ test("shares entry typography and baseline rules without expanding the font pale
       ]),
     },
   ];
+  let schoolTypographyRule;
   for (const group of typographyGroups) {
     const sharedRules = [];
     css.walkRules((rule) => {
@@ -211,7 +213,10 @@ test("shares entry typography and baseline rules without expanding the font pale
       if (rule.selectors.some((selector) => group.selectors.includes(selector))) {
         rule.walkDecls((declaration) => {
           if (group.declarations.has(declaration.prop)) {
-            assert.equal(declaration.value, group.declarations.get(declaration.prop), `Conflicting typography in ${rule.selector}`);
+            const metadataWeight = declaration.prop === "font-weight"
+              && rule.selectors.every((selector) => boldMetadataSelectors.includes(selector));
+            const expected = metadataWeight ? "700" : group.declarations.get(declaration.prop);
+            assert.equal(declaration.value, expected, `Conflicting typography in ${rule.selector}`);
           }
         });
       }
@@ -220,7 +225,16 @@ test("shares entry typography and baseline rules without expanding the font pale
     const sharedDeclarations = new Map(sharedRules[0].nodes
       .filter((node) => node.type === "decl").map((node) => [node.prop, node.value]));
     for (const [property, value] of group.declarations) assert.equal(sharedDeclarations.get(property), value);
+    if (group.selectors.includes(".record-row div p")) schoolTypographyRule = sharedRules[0];
   }
+  const boldMetadataRules = [];
+  css.walkRules((rule) => {
+    if (rule.selectors.length === boldMetadataSelectors.length
+      && boldMetadataSelectors.every((selector) => rule.selectors.includes(selector))) boldMetadataRules.push(rule);
+  });
+  assert.equal(boldMetadataRules.length, 1, "Metadata labels should have one separate bold override");
+  assert.ok(boldMetadataRules[0].nodes.some((node) => node.type === "decl" && node.prop === "font-weight" && node.value === "700"));
+  assert.ok(boldMetadataRules[0].source.start.offset > schoolTypographyRule.source.start.offset, "Bold metadata must override the shared normal school-text rule");
   const sizeDeclarations = [];
   css.walkDecls("--entry-title-size", (declaration) => sizeDeclarations.push(declaration));
   assert.equal(sizeDeclarations.length, 1, "Entry title size must not diverge at mobile breakpoints");
