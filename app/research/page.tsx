@@ -35,26 +35,31 @@ function PaperList({
     <section className="publication-group" id={id}>
       <div className="subsection-heading">
         <h3>{title}</h3>
-        <span>{String(papers.length).padStart(2, "0")}</span>
       </div>
       <div className="publication-list">
         {papers.map((paper, index) => (
           <article className="publication-row" key={paper.id}>
             <span className="publication-number">
-              {String(index + 1).padStart(2, "0")}
+              {index + 1}.
             </span>
             <div className="publication-main">
-              <div className="publication-meta">
-                {paper.year && <span>{paper.year}</span>}
-                {paper.status && (
-                  <span className="paper-status">{paper.status}</span>
-                )}
-              </div>
               <h4>{paper.title}</h4>
               <p className="authors">
                 <Authors value={paper.authors} />
               </p>
-              <p className="publication-venue">{paper.venue}</p>
+              <p className="publication-venue">
+                {paper.venue.replace(/\.$/, "")}
+                {paper.year && !paper.venue.includes(paper.year)
+                  ? `, ${paper.year}`
+                  : ""}
+                .
+                {paper.status && (
+                  <>
+                    {" "}
+                    <span className="paper-status">{paper.status}</span>
+                  </>
+                )}
+              </p>
               {paper.eventDetails && (
                 <p className="authors">
                   {paper.eventDetails.place} · {paper.eventDetails.dates}
@@ -78,7 +83,7 @@ function PaperList({
 export default function Research() {
   return (
     <SiteFrame current="Research">
-      <PageHeader label="Research & scholarship" title="Research">
+      <PageHeader title="Research">
         <p>
           I study how data and learning algorithms can improve transportation
           systems, from modeling travel behavior and generating scarce travel
@@ -94,11 +99,7 @@ export default function Research() {
         ]}
       />
       <section className="section section-paper" id="publications">
-        <SectionHeading
-          index="01"
-          label="Research output"
-          title="Publications"
-        />
+        <SectionHeading title="Publications" />
         <PaperList
           title="Journal Papers"
           id="journal-papers"
@@ -116,12 +117,12 @@ export default function Research() {
         />
       </section>
       <section className="section section-ink" id="projects">
-        <SectionHeading index="02" label="Applied research" title="Projects" />
+        <SectionHeading title="Projects" />
         <div className="project-list">
           {projects.map((project, index) => (
             <article className="project-row" key={project.code}>
               <span className="project-number">
-                {String(index + 1).padStart(2, "0")}
+                {index + 1}.
               </span>
               <div>
                 <p className="project-meta">

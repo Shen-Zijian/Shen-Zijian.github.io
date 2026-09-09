@@ -4,7 +4,7 @@ import { researchThemes } from "./lib/profile-data";
 export default function Home() {
   return (
     <SiteFrame current="Home">
-      <PageHeader label="Shen Zijian / Academic profile" title="About me">
+      <PageHeader title="About me">
         <p>
           I am a <strong>Ph.D. student in Civil Engineering</strong> at{" "}
           <a href="https://www.hku.hk/">The University of Hong Kong</a>.
@@ -18,11 +18,10 @@ export default function Home() {
         </p>
       </PageHeader>
       <section className="section section-paper" id="research">
-        <SectionHeading index="01" label="Focus" title="Research interests" />
+        <SectionHeading title="Research interests" />
         <div className="research-themes">
           {researchThemes.map((theme) => (
             <article className="research-theme" key={theme.number}>
-              <span>{theme.number}</span>
               <div>
                 <h3>{theme.title}</h3>
                 <p>{theme.description}</p>
@@ -35,11 +34,7 @@ export default function Home() {
         </a>
       </section>
       <section className="section home-background">
-        <SectionHeading
-          index="02"
-          label="Background"
-          title="Across disciplines"
-        />
+        <SectionHeading title="Background" />
         <p>
           My academic background spans automation, computer science, and civil
           engineering. I have held research assistant positions at The

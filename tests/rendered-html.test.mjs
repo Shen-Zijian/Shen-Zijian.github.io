@@ -68,6 +68,8 @@ for (const route of routes) {
     assert.ok(document.querySelector('img[src="/zijian-shen-portrait.jpg"]'));
     assert.doesNotMatch(text(main), /ReLMM-TG|\bSelected\b/i);
     assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
+    assert.equal(document.querySelectorAll(".eyebrow, .section-index").length, 0);
+    assert.doesNotMatch(text(document.querySelector("footer#contact")), /Get in touch/i);
 
     const primaryNavigation = document.querySelector('nav[aria-label="Primary navigation"]');
     assert.ok(primaryNavigation);
@@ -78,6 +80,11 @@ for (const route of routes) {
       assert.ok(primaryNavigation.querySelector(`a[href="${destination.path}"]`));
     }
 
+    if (route.path === "/") {
+      assert.equal(text(main.querySelector(".home-background h2")), "Background");
+      assert.doesNotMatch(text(main), /Across disciplines/i);
+      assert.equal(main.querySelectorAll(".research-theme > span").length, 0);
+    }
     if (route.path === "/research/") {
       assert.match(text(main), /Publications/);
       assert.match(text(main), /LEBGen:/);
@@ -85,6 +92,22 @@ for (const route of routes) {
       for (const id of ["journal-papers", "conference-papers", "working-papers", "projects"]) {
         assert.ok(main.querySelector(`#${id}`));
       }
+      for (const group of main.querySelectorAll(".publication-group")) {
+        assert.equal(text(group.querySelector(".subsection-heading")), text(group.querySelector(".subsection-heading h3")));
+        const papers = group.querySelectorAll("article");
+        papers.forEach((paper, index) => {
+          assert.equal(text(paper.querySelector(".publication-number")), `${index + 1}.`);
+          const status = paper.querySelector(".paper-status");
+          if (status) {
+            const elements = paper.querySelectorAll("*");
+            const venue = paper.querySelector(".publication-venue");
+            assert.ok(venue);
+            assert.ok(elements.indexOf(status) > elements.indexOf(venue));
+          }
+        });
+      }
+      assert.match(text(main.querySelector("#journal-papers .publication-venue")), /2026/);
+      assert.deepEqual(main.querySelectorAll("#projects .project-number").map(text), ["1.", "2.", "3.", "4."]);
       const conferencePapers = main.querySelector("#conference-papers");
       assert.equal(conferencePapers.querySelectorAll("article").length, 4);
       for (const title of [
@@ -100,6 +123,7 @@ for (const route of routes) {
     }
     if (route.path === "/experience/") {
       assert.match(text(main), /Teaching Assistant/);
+      assert.match(text(main.querySelector("#teaching .section-intro")), /The University of Hong Kong/);
       for (const code of ["CIVL6047", "CIVL3120", "CIVL7018", "CIVL7021"]) {
         assert.ok(text(main).includes(code));
       }
