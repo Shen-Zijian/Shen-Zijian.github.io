@@ -192,6 +192,55 @@ test("organizes publications and projects without presenting submissions as acce
   assert.doesNotMatch(text(smartSim), /Major revision/i);
 });
 
+test("keeps complete project details below each title in funder-date-code order", () => {
+  const section = documents.get("/research/").querySelector("#projects");
+  const projects = [
+    {
+      title: "SmartSim: AI-assisted Simulation Software for Multimodal Transportation Operations",
+      funder: "Smart Traffic Fund, Hong Kong SAR Government",
+      dates: "2024 - 2026",
+      code: "STF / PSRI/78/2311/RA",
+    },
+    {
+      title: "Development of a Simulation Platform and Artificial Intelligent Algorithms for Optimising Operation and Management of Taxi E-hailing Services",
+      funder: "Smart Traffic Fund, Hong Kong SAR Government",
+      dates: "2023 - 2024",
+      code: "STF / PSRI/29/2201/PR",
+    },
+    {
+      title: "Estimating carbon emissions, assessing decarbonization strategies and managing green transportation in Hong Kong with a multifunctional simulation platform",
+      funder: "Environment Conservation Fund (ECF) Environmental Research, Technology Demonstration and Conference Projects",
+      dates: "2024 - 2026",
+      code: "ECF / 102/2022",
+    },
+    {
+      title: "Multimodal traffic simulation, route recommendation and subsidy: Enhancing first and last mile connectivity for MTR",
+      funder: "MTR Research Funding",
+      dates: "2026 - 2028",
+      code: "MRF 2025 / HKU-25003",
+    },
+  ];
+
+  assert.equal(section.querySelectorAll("article").length, projects.length);
+  for (const project of projects) {
+    const article = articleContaining(section, project.title);
+    const title = article.querySelector("h3");
+    const funder = article.querySelector(".project-funder");
+    const metadata = funder?.querySelector(".project-meta");
+    assert.ok(funder && metadata, `Project metadata must be inside the funder line: ${project.code}`);
+    assert.equal(text(title), project.title);
+    const content = text(funder);
+    assert.ok(content.startsWith(project.funder));
+    assert.ok(content.indexOf(project.dates) >= project.funder.length);
+    assert.ok(content.indexOf(project.code) > content.indexOf(project.dates));
+    assert.ok(text(metadata).includes(project.dates));
+    assert.ok(text(metadata).includes(project.code));
+    assert.equal(article.querySelectorAll(".project-meta").length, 1);
+    assert.ok(article.querySelectorAll("*").indexOf(title) < article.querySelectorAll("*").indexOf(funder));
+    assert.equal(text(article.querySelector(".project-role")), "Core Member");
+  }
+});
+
 test("moves all conference presentations into research without losing their records", () => {
   const conferencePapers = documents.get("/research/").querySelector("#conference-papers");
   const experience = documents.get("/experience/");

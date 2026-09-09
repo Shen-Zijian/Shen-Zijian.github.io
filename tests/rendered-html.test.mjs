@@ -5,6 +5,7 @@ import test from "node:test";
 
 const require = createRequire(import.meta.url);
 const { parse } = require("next/dist/compiled/node-html-parser");
+const postcss = require("postcss");
 const profileUrls = [
   "mailto:shenzj@connect.hku.hk",
   "https://github.com/Shen-Zijian",
@@ -108,6 +109,16 @@ for (const route of routes) {
       }
       assert.match(text(main.querySelector("#journal-papers .publication-venue")), /2026/);
       assert.deepEqual(main.querySelectorAll("#projects .project-number").map(text), ["1.", "2.", "3.", "4."]);
+      for (const project of main.querySelectorAll("#projects article")) {
+        const funder = project.querySelector(".project-funder");
+        const metadata = funder?.querySelector(".project-meta");
+        assert.ok(funder && metadata);
+        assert.equal(project.querySelectorAll(".project-meta").length, 1);
+        const elements = project.querySelectorAll("*");
+        assert.ok(elements.indexOf(project.querySelector("h3")) < elements.indexOf(funder));
+        assert.match(text(metadata), /20\d{2} - 20\d{2}/);
+        assert.match(text(metadata), /STF \/|ECF \/|MRF 2025 \/ /);
+      }
       const conferencePapers = main.querySelector("#conference-papers");
       assert.equal(conferencePapers.querySelectorAll("article").length, 4);
       for (const title of [
@@ -148,6 +159,71 @@ for (const route of routes) {
     }
   });
 }
+
+test("shares entry typography and baseline rules without expanding the font palette", async () => {
+  const css = postcss.parse(await readFile(new URL("../app/globals.css", import.meta.url), "utf8"));
+  const fontTokens = new Map([
+    ["--font-sans", "Arial, sans-serif"],
+    ["--font-serif", "Georgia, serif"],
+    ["--font-chinese", '"Songti SC", serif'],
+  ]);
+  const declaredFontTokens = new Set();
+  css.walkDecls(/^--font-/, (declaration) => {
+    declaredFontTokens.add(declaration.prop);
+    assert.equal(declaration.value, fontTokens.get(declaration.prop));
+  });
+  assert.deepEqual(declaredFontTokens, new Set(fontTokens.keys()));
+  css.walkDecls("font-family", (declaration) => {
+    assert.ok([...fontTokens.keys()].some((token) => declaration.value === `var(${token})`), `Unmanaged font family: ${declaration.value}`);
+  });
+
+  const entrySelectors = [
+    ".publication-number", ".publication-main h4", ".project-number", ".project-row h3",
+    ".record-dates", ".record-row h3", ".course-code", ".course-main h3",
+    ".course-term p", ".award-row > span", ".award-row h3",
+  ];
+  const typography = new Map([
+    ["font-family", "var(--font-serif)"],
+    ["font-size", "var(--entry-title-size)"],
+    ["font-weight", "600"],
+    ["line-height", "1.4"],
+  ]);
+  const sharedRules = [];
+  css.walkRules((rule) => {
+    if (entrySelectors.every((selector) => rule.selectors.includes(selector))) sharedRules.push(rule);
+    if (rule.selectors.some((selector) => entrySelectors.includes(selector))) {
+      rule.walkDecls((declaration) => {
+        if (typography.has(declaration.prop)) {
+          assert.equal(declaration.value, typography.get(declaration.prop), `Conflicting entry typography in ${rule.selector}`);
+        }
+      });
+    }
+  });
+  assert.equal(sharedRules.length, 1, "Entry labels and headings should share one typography rule");
+  const sharedDeclarations = new Map(sharedRules[0].nodes
+    .filter((node) => node.type === "decl").map((node) => [node.prop, node.value]));
+  for (const [property, value] of typography) assert.equal(sharedDeclarations.get(property), value);
+  const sizeDeclarations = [];
+  css.walkDecls("--entry-title-size", (declaration) => sizeDeclarations.push(declaration));
+  assert.equal(sizeDeclarations.length, 1, "Entry title size must not diverge at mobile breakpoints");
+  assert.equal(sizeDeclarations[0].value, "22px");
+
+  for (const selector of [".publication-row", ".project-row", ".record-row", ".teaching-row", ".award-row"]) {
+    const alignments = [];
+    css.walkRules((rule) => {
+      if (rule.selectors.includes(selector)) rule.walkDecls("align-items", (declaration) => alignments.push(declaration.value));
+    });
+    assert.ok(alignments.length > 0, `Missing baseline alignment for ${selector}`);
+    assert.ok(alignments.every((value) => value === "first baseline"));
+  }
+  css.walkRules((rule) => {
+    if (rule.selectors.some((selector) => [".publication-number", ".project-number", ".course-code"].includes(selector))) {
+      rule.walkDecls(/^padding(?:-|$)/, (declaration) => {
+        assert.ok(declaration.value.split(/\s+/).every((value) => /^0(?:px|rem|em|%)?$/.test(value)), `Extra label padding in ${rule.selector}`);
+      });
+    }
+  });
+});
 
 test("ships the profile assets without starter dependencies", async () => {
   const [layout, packageJson] = await Promise.all([
