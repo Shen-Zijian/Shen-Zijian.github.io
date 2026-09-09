@@ -415,6 +415,13 @@ p {
   line-height: 1.7;
 }
 
+.record-dates,
+.course-code,
+.course-term p,
+.award-row > span {
+  font-weight: 700;
+}
+
 .publication-group + .publication-group {
   margin-top: 42px;
 }
