@@ -284,7 +284,7 @@ export const awards = [
     title: "Third Prize, BIT Science Contest",
   },
   {
-    year: "2017 & 2018",
+    year: "2017 - 2018",
     title:
       "Second-Class Scholarship for Academic Excellence, Beijing Institute of Technology",
   },
