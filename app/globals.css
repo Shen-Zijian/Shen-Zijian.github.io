@@ -374,9 +374,6 @@ p {
 }
 .research-theme h3 {
   margin: 0 0 8px;
-  font-size: 16px;
-  line-height: 1.5;
-  font-weight: 600;
 }
 .research-theme p {
   max-width: 780px;
@@ -393,21 +390,29 @@ p {
   margin-bottom: 20px;
 }
 
+.research-theme h3,
 .publication-number,
 .publication-main h4,
 .project-number,
 .project-row h3,
-.record-dates,
 .record-row h3,
-.course-code,
 .course-main h3,
-.course-term p,
-.award-row > span,
 .award-row h3 {
   font-family: var(--font-serif);
   font-size: var(--entry-title-size);
   font-weight: 600;
   line-height: 1.4;
+}
+
+.record-dates,
+.record-row div p,
+.course-code,
+.course-term p,
+.award-row > span {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
 }
 
 .publication-group + .publication-group {
@@ -521,7 +526,7 @@ p {
 
 .record-row {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 168px minmax(0, 1fr);
   align-items: first baseline;
   gap: 28px;
   padding: 24px 0;
@@ -537,8 +542,6 @@ p {
 .record-row div p {
   margin: 0 0 5px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
 }
 .record-note {
   display: inline-block;
@@ -556,7 +559,7 @@ p {
 }
 .teaching-row {
   display: grid;
-  grid-template-columns: 128px minmax(0, 1fr) 132px;
+  grid-template-columns: 96px minmax(0, 1fr) 112px;
   align-items: first baseline;
   gap: 22px;
   padding: 28px 0;
@@ -600,7 +603,7 @@ p {
 }
 .award-row {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 168px minmax(0, 1fr);
   align-items: first baseline;
   gap: 28px;
   padding: 24px 0;
@@ -707,7 +710,7 @@ p {
     padding-right: 36px;
   }
   .teaching-row {
-    grid-template-columns: 128px minmax(0, 1fr);
+    grid-template-columns: 96px minmax(0, 1fr);
     gap: 16px;
   }
   .course-terms {
@@ -721,7 +724,7 @@ p {
   }
   .record-row,
   .award-row {
-    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-columns: 168px minmax(0, 1fr);
     gap: 20px;
   }
   .section-navigation {

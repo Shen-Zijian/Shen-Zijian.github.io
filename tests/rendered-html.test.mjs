@@ -177,32 +177,50 @@ test("shares entry typography and baseline rules without expanding the font pale
     assert.ok([...fontTokens.keys()].some((token) => declaration.value === `var(${token})`), `Unmanaged font family: ${declaration.value}`);
   });
 
-  const entrySelectors = [
-    ".publication-number", ".publication-main h4", ".project-number", ".project-row h3",
-    ".record-dates", ".record-row h3", ".course-code", ".course-main h3",
-    ".course-term p", ".award-row > span", ".award-row h3",
+  const typographyGroups = [
+    {
+      name: "Entry titles and publication/project indices",
+      selectors: [
+        ".publication-number", ".publication-main h4", ".project-number", ".project-row h3",
+        ".record-row h3", ".course-main h3", ".award-row h3", ".research-theme h3",
+      ],
+      declarations: new Map([
+        ["font-family", "var(--font-serif)"],
+        ["font-size", "var(--entry-title-size)"],
+        ["font-weight", "600"],
+        ["line-height", "1.4"],
+      ]),
+    },
+    {
+      name: "Dates, course labels, and school text",
+      selectors: [
+        ".record-dates", ".record-row div p", ".course-code", ".course-term p", ".award-row > span",
+      ],
+      declarations: new Map([
+        ["font-family", "var(--font-sans)"],
+        ["font-size", "14px"],
+        ["font-weight", "400"],
+        ["line-height", "1.7"],
+      ]),
+    },
   ];
-  const typography = new Map([
-    ["font-family", "var(--font-serif)"],
-    ["font-size", "var(--entry-title-size)"],
-    ["font-weight", "600"],
-    ["line-height", "1.4"],
-  ]);
-  const sharedRules = [];
-  css.walkRules((rule) => {
-    if (entrySelectors.every((selector) => rule.selectors.includes(selector))) sharedRules.push(rule);
-    if (rule.selectors.some((selector) => entrySelectors.includes(selector))) {
-      rule.walkDecls((declaration) => {
-        if (typography.has(declaration.prop)) {
-          assert.equal(declaration.value, typography.get(declaration.prop), `Conflicting entry typography in ${rule.selector}`);
-        }
-      });
-    }
-  });
-  assert.equal(sharedRules.length, 1, "Entry labels and headings should share one typography rule");
-  const sharedDeclarations = new Map(sharedRules[0].nodes
-    .filter((node) => node.type === "decl").map((node) => [node.prop, node.value]));
-  for (const [property, value] of typography) assert.equal(sharedDeclarations.get(property), value);
+  for (const group of typographyGroups) {
+    const sharedRules = [];
+    css.walkRules((rule) => {
+      if (group.selectors.every((selector) => rule.selectors.includes(selector))) sharedRules.push(rule);
+      if (rule.selectors.some((selector) => group.selectors.includes(selector))) {
+        rule.walkDecls((declaration) => {
+          if (group.declarations.has(declaration.prop)) {
+            assert.equal(declaration.value, group.declarations.get(declaration.prop), `Conflicting typography in ${rule.selector}`);
+          }
+        });
+      }
+    });
+    assert.equal(sharedRules.length, 1, `${group.name} should share one typography rule`);
+    const sharedDeclarations = new Map(sharedRules[0].nodes
+      .filter((node) => node.type === "decl").map((node) => [node.prop, node.value]));
+    for (const [property, value] of group.declarations) assert.equal(sharedDeclarations.get(property), value);
+  }
   const sizeDeclarations = [];
   css.walkDecls("--entry-title-size", (declaration) => sizeDeclarations.push(declaration));
   assert.equal(sizeDeclarations.length, 1, "Entry title size must not diverge at mobile breakpoints");
