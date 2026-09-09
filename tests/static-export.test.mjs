@@ -58,6 +58,8 @@ for (const route of routes) {
       }
     }
     assert.doesNotMatch(text(main), /ReLMM-TG|\bSelected\b|SkeletonPreview/i);
+    assert.equal(document.querySelectorAll(".eyebrow, .section-index").length, 0);
+    assert.doesNotMatch(text(document.querySelector("footer#contact")), /Get in touch/i);
 
     const primaryNavigation = document.querySelector('nav[aria-label="Primary navigation"]');
     assert.ok(primaryNavigation);
@@ -104,6 +106,63 @@ for (const route of routes) {
     );
   });
 }
+
+test("keeps home headings and research interests free of decorative labels", () => {
+  const home = documents.get("/");
+  assert.equal(text(home.querySelector(".home-background h2")), "Background");
+  assert.doesNotMatch(text(home.querySelector("main")), /Across disciplines/i);
+  const themes = home.querySelectorAll(".research-theme");
+  assert.equal(themes.length, 3);
+  assert.equal(home.querySelectorAll(".research-theme > span").length, 0);
+  for (const theme of themes) {
+    assert.ok(text(theme.querySelector("h3")));
+    assert.ok(text(theme.querySelector("p")));
+  }
+});
+
+test("uses plain per-group numbering and places paper years and statuses with the venue", () => {
+  const research = documents.get("/research/");
+  const groups = [
+    ["journal-papers", "Journal Papers"],
+    ["conference-papers", "Conference Papers"],
+    ["working-papers", "Working Papers"],
+  ];
+  for (const [id, title] of groups) {
+    const group = research.querySelector(`#${id}`);
+    assert.equal(text(group.querySelector(".subsection-heading")), title);
+    const papers = group.querySelectorAll("article");
+    assert.ok(papers.length > 0);
+    papers.forEach((paper, index) => {
+      assert.equal(text(paper.querySelector(".publication-number")), `${index + 1}.`);
+      const status = paper.querySelector(".paper-status");
+      if (status) {
+        const venue = paper.querySelector(".publication-venue");
+        const elements = paper.querySelectorAll("*");
+        assert.ok(venue);
+        assert.ok(elements.indexOf(status) > elements.indexOf(venue), "Paper status must be at or below the venue");
+      }
+    });
+  }
+
+  const years = [
+    ["online incremental transport mode choice", "2026"],
+    ["Dynamic adjustment of matching radii", "2025"],
+    ["A temporally aware deep reinforcement learning framework", "2026"],
+    ["Multipath:", "2025"],
+    ["Personalized fair matching", "2024"],
+    ["Multi-strategy collaborative optimized YOLOv5s", "2023"],
+    ["LAB-Tab:", "2026"],
+    ["LEBGen:", "2026"],
+    ["Centralized Route Recommendation", "2026"],
+  ];
+  for (const [title, year] of years) {
+    const paper = articleContaining(research.querySelector("#publications"), title);
+    const venue = text(paper.querySelector(".publication-venue"));
+    assert.equal((venue.match(new RegExp(`\\b${year}\\b`, "g")) ?? []).length, 1, `Expected ${year} exactly once in the venue for ${title}`);
+  }
+  const projectNumbers = research.querySelectorAll("#projects .project-number").map(text);
+  assert.deepEqual(projectNumbers, ["1.", "2.", "3.", "4."]);
+});
 
 test("organizes publications and projects without presenting submissions as accepted papers", () => {
   const document = documents.get("/research/");
@@ -182,6 +241,7 @@ test("renders the supplied teaching appointments and preserves education history
   const teaching = document.querySelector("#teaching");
   assert.ok(teaching, "Expected a dedicated teaching section");
   assert.match(text(teaching), /Teaching Assistant/);
+  assert.match(text(teaching.querySelector(".section-intro")), /The University of Hong Kong/);
 
   const courses = [
     { code: "CIVL6047", years: ["2025-2026"], upcoming: false },
